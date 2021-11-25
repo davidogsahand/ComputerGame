@@ -1,0 +1,20 @@
+#BlueJ class context
+comment0.target=Road
+comment0.text=\r\n\ @author\ David\ Andersen\ og\ Sahand\ Matten.\r\n
+comment1.params=from\ to\ length
+comment1.target=Road(City,\ City,\ int)
+comment2.params=
+comment2.target=City\ getFrom()
+comment3.params=
+comment3.target=City\ getTo()
+comment4.params=
+comment4.target=int\ getLength()
+comment5.params=r
+comment5.target=int\ compareTo(Road)
+comment6.params=
+comment6.target=java.lang.String\ toString()
+comment7.params=o
+comment7.target=boolean\ equals(java.lang.Object)
+comment8.params=
+comment8.target=int\ hashCode()
+numComments=9

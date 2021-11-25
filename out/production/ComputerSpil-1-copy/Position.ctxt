@@ -1,0 +1,26 @@
+#BlueJ class context
+comment0.target=Position
+comment0.text=\r\n\ @author\ David\ Andersen\ og\ Sahand\ Matten\r\n
+comment1.params=
+comment1.target=City\ getFrom()
+comment10.params=o
+comment10.target=boolean\ equals(java.lang.Object)
+comment11.params=
+comment11.target=int\ hashCode()
+comment2.params=
+comment2.target=City\ getTo()
+comment3.params=
+comment3.target=int\ getDistance()
+comment4.params=
+comment4.target=int\ getTotal()
+comment5.params=from\ to\ distance
+comment5.target=Position(City,\ City,\ int)
+comment6.params=
+comment6.target=boolean\ move()
+comment7.params=
+comment7.target=void\ turnAround()
+comment8.params=
+comment8.target=boolean\ hasArrived()
+comment9.params=
+comment9.target=java.lang.String\ toString()
+numComments=12
