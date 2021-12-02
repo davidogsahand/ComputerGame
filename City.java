@@ -1,11 +1,11 @@
 import java.util.Objects;
 
 /**
- * @author David Andersen og Sahand Matten
- * @version 13-11-2021
- *
  * this class represents a city in the game.
  * each city has a name, a value, and a country it is in.
+ *
+ *  * @author David Andersen og Sahand Matten.
+ *  * @version 13-11-2021
  */
 
 public class City implements Comparable<City> {
@@ -73,9 +73,13 @@ public class City implements Comparable<City> {
      * @return bonus to be received by the player.
      */
     public int arrive() {
-        int bonus = country.bonus(this.value);
-        this.value -= bonus;
-        return bonus;
+        int bonusValue = country.bonus(value);
+        if(bonusValue >= 0) {
+            value = value - bonusValue;
+            return bonusValue;
+        } else {
+            return bonusValue;
+        }
     }
 
 

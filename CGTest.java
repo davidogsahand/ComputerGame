@@ -17,23 +17,21 @@ import java.util.*;
  * @author  Nikolaj Ignatieff Schwartzbach
  * @version April 2017
  */
-public class CGTest
-{
+public class CGTest {
     private Game game;
     private Country country1, country2;
     private City cityA, cityB, cityC, cityD, cityE, cityF, cityG;
 
     /**
      * Sets up the test fixture.
-     *
+     * <p>
      * Called before every test case method.
      */
     @BeforeEach
-    public void setUp()
-    {
+    public void setUp() {
         // Create countries
         country1 = new Country("Country 1");
-        country2 = new Country("Country 2");
+        country2 = new MafiaCountry("Country 2");
 
         // Create cities
         cityA = new City("City A", 80, country1);
@@ -76,25 +74,10 @@ public class CGTest
         game.addCountry(country2);
     }
 
-    @Test
-    public void arriveFromOtherCountry() {
-        for (int seed = 0; seed < 1000; seed++) {
-            Player player = new GUIPlayer(new Position(cityE, cityC, 0), 250);
-            game.getRandom().setSeed(seed); //set seed
-            int bonus = country1.bonus(40); //remember bonus
-            int toll = 250 / 5; // 20% of 250
-            game.getRandom().setSeed(seed); //reset seed
-            assertEquals(bonus - toll, cityC.arrive(player)); //same bonus
-            assertEquals(40 - bonus + toll, cityC.getValue());
-            cityC.reset();
-        }
 
-    }
 
-    @Test
-    public void arriveAtCapitalCity() {
 
-    }
+
 
 
 }
