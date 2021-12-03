@@ -247,7 +247,8 @@ public class GUI {
     }
 
     /**
-     *
+     * sets the items of the top menuBar.
+     * makes two menus, one for game related options and one for game-log related options.
      */
     public void setMenuBar() {
         //add items to menu.
@@ -502,7 +503,11 @@ public class GUI {
         //Return the JPanel
         return buttons;
     }
-    
+
+    /**
+     * check weather the input in the options-menu are acceptable and applies them.
+     * returns an error message if the options arent acceptable.
+     */
     private void applyOptions() {
         //optionsShowing = false;
         options.dispatchEvent(new WindowEvent(options, WindowEvent.WINDOW_CLOSING));
