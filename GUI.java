@@ -44,6 +44,9 @@ public class GUI {
     private JMenuItem fast = new JMenuItem("Fast");
     private JMenuItem sonic = new JMenuItem("Sonic");
 
+    /** The textField to hold the moves made by the player */
+    private JTextArea choiceText;
+
 
     /** The JPanel where the world are drawn. */
     private WorldPanel panel;
@@ -126,7 +129,12 @@ public class GUI {
         panel = new WorldPanel(game);
         panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
+        //initialize choiceText
+        choiceText = new JTextArea(0, 15);
+        choiceText.setText("User Choices:");
+        choiceText.setMargin(new Insets(10, 10, 10, 10));
 
+        JScrollPane userChoices = new JScrollPane(choiceText, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
         //Handle mouse click events in the inner window
         panel.addMouseListener(new MouseAdapter() {
@@ -140,6 +148,7 @@ public class GUI {
                         double dist = Math.hypot(p.getX() - e.getX(), p.getY() - e.getY());
                         if(dist < WorldPanel.MIN_CIRCLE_RADIUS + 5){
                             game.clickCity(c);
+                            choiceText.append("\n • Step" + game.getStepsLeft() + ": " + c.getName());
                         }
                     }
                 }
@@ -202,9 +211,10 @@ public class GUI {
         
         //Initialize the super JPanel (which contains the other JPanels)
         superpanel = new JPanel();
-        superpanel.setLayout(new BoxLayout(superpanel, BoxLayout.Y_AXIS));
-        superpanel.add(panel);
-        superpanel.add(buttons);
+        superpanel.setLayout(new BorderLayout(6, 6));
+        superpanel.add(panel, BorderLayout.CENTER);
+        superpanel.add(buttons, BorderLayout.SOUTH);
+        superpanel.add(userChoices, BorderLayout.EAST);
         
         //Initialize and setup the the JFrame
         mainFrame = new JFrame("Nordic Traveller - Introduktion til Programmering");
@@ -251,17 +261,18 @@ public class GUI {
      * makes two menus, one for game related options and one for game-log related options.
      */
     public void setMenuBar() {
-        //add items to menu.
+        //add items to Game menu.
         gameMenu.add(newGameItem);
         gameMenu.add(pauseResumeGameItem);
         gameMenu.add(abortGameItem);
         gameMenu.add(optionsItem);
-
         gameMenu.add(setSpeedMenu);
 
+        //add items to Log menu.
         logMenu.add(playLogItem);
         logMenu.add(saveLogItem);
 
+        //add items to setSpeed menu.
         setSpeedMenu.add(slow);
         setSpeedMenu.add(medium);
         setSpeedMenu.add(fast);
@@ -281,17 +292,22 @@ public class GUI {
         playLogItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, CTRL_SHIFT));
         saveLogItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, CTRL_SHIFT));
 
-        //add functionality to the menu items.
+        //add functionality to the Game menu items.
         newGameItem.addActionListener(e -> newGameButton.doClick());
         pauseResumeGameItem.addActionListener(e -> pauseResumeButton.doClick());
         abortGameItem.addActionListener(e -> abortButton.doClick());
         optionsItem.addActionListener(e -> optionsButton.doClick());
 
-        //add functionality to the speed menu items.
+        //add functionality to the Speed menu items.
         slow.addActionListener(e -> setSpeed(1));
         medium.addActionListener(e -> setSpeed(2));
         fast.addActionListener(e -> setSpeed(3));
         sonic.addActionListener(e -> setSpeed(4));
+
+        //add functionality to the Log menu items.
+        saveLogItem.addActionListener(e -> saveLog());
+        playLogItem.addActionListener(e -> playLog());
+
 
         //add menu to menuBar and add menuBar to Mainframe.
         menuBar.add(gameMenu);
@@ -299,6 +315,41 @@ public class GUI {
         mainFrame.setJMenuBar(menuBar);
     }
 
+    /**
+     * saves the current log to a file on the user´s computer.
+     */
+    public void saveLog() {
+        if (fileChooser.showSaveDialog(mainFrame) == fileChooser.APPROVE_OPTION) {
+            try {
+
+                ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(fileChooser.getSelectedFile()));
+                os.writeObject(game.getLog());
+                os.close();
+            }
+            catch (IOException e) {
+                JOptionPane.showMessageDialog(mainFrame, "unable to save file, ", "Malformed input", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    /**
+     * replays a game described by a log file selected from the user´s computer.
+     */
+    public void playLog() {
+        if (fileChooser.showSaveDialog(mainFrame) == fileChooser.APPROVE_OPTION) {
+            try {
+                ObjectInputStream os = new ObjectInputStream(new FileInputStream(fileChooser.getSelectedFile()));
+                Log log = (Log) os.readObject();
+                game.playLog(log);
+            }
+            catch (IOException e) {
+                JOptionPane.showMessageDialog(mainFrame, "unable to open file", "Malformed input", JOptionPane.ERROR_MESSAGE);
+            }
+            catch (ClassNotFoundException e) {
+                JOptionPane.showMessageDialog(mainFrame, "file not found, please choose another file.", "Malformed input", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
     /**
      * Returns the unsigned difference between two angles in the interval [-pi, pi].
      * @param a First angle
@@ -448,7 +499,8 @@ public class GUI {
         game.reset(); 
         mainFrame.repaint();
     }
-    
+
+
     /**
      * Creates the JPanel which contains the buttons in the bottom of the GUI
      * @return A JPanel containing some buttons to control the game
@@ -489,14 +541,14 @@ public class GUI {
         //Instantiate the 'Play log...'-button
         playLogButton = new JButton("Play log...");
         //Connect an ActionListener
-        playLogButton.addActionListener(e -> testPlayButton());
+        playLogButton.addActionListener(e -> playLog());
         //Add it to the button panel
         buttons.add(playLogButton);
 
         //instantiate the 'Save log...' button
         saveLogButton = new JButton("Save log...");
         //Connect an ActionListener
-        saveLogButton.addActionListener(e -> testSaveButton());
+        saveLogButton.addActionListener(e -> saveLog());
         //Add it to the button panel
         buttons.add(saveLogButton);
         

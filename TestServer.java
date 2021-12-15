@@ -25,7 +25,8 @@ public class TestServer {
     private TestServer() {}
 
     public static void main(String[] args) throws IOException, URISyntaxException {
-        testAndOpenInBrowser("CG4");
+        testAndOpenInBrowser("CG5");
+
     }
     /**
      * Downloads any available updates to the testserver file.
